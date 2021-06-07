@@ -9,18 +9,30 @@
 
 int main(int argc,char **argv){
 	uint32_t rip = 0;
-	//uint32_t lip = 0;
+	uint32_t lip = 0;
 	uint16_t rprt = 0;
 	uint16_t lprt = 0;
 	char user[80];
 	char command[200];
 	char q = 10;
+	char modified[5] = {0,0,0,0,0}; // [0] lp, [1] rp, [2] rip, [3] user
 	uint8_t *p;
 	p = (uint8_t*) &rip;
+	
+	/* defaults */
+	sprintf(user, "root");
+	rprt = 80;
+	lprt = 80;
+	
 
 	for(int i = 1; i < argc; i++){
 		if(ARG_CHECK(argv[i],"--help")){
 			printf("SSH revese tunnel help\n");
+			printf("usage: -lp <port> -rp <port> -rip <ip address> -u <user>\n");
+			printf("-lp\t--local-port\t\tLocal port to forward\n");
+			printf("-rp\t--remote-port\t\tRemote port, port to open on the remote host\n");
+			printf("-rip\t--remote-ip\t\tIP of the host that is used for forwarding\n");
+			printf("-u\t--user\t\t\tUser to connect to on the remote host\n");
 			return 0;
 		}else if(ARG_CHECK(argv[i],"-lp")){
 			lprt = (uint16_t) strtol(argv[i++],0,10);
@@ -49,15 +61,15 @@ int main(int argc,char **argv){
 		//SCNu8 -> for input of 8bit unsigned integers
 		//SCNd8 -> for input of 8bit signed integers
 
-		printf("Remote Port: ");
+		printf("Remote Port(%d): ",rprt);
 		scanf("%" SCNu16,&rprt);
 		//SCNu16 -> for input of 16bit unsigned integers
 		//SCNd16 -> for input of 16bit signed integers
 
-		printf("Local Port: ");
+		printf("Local Port(%d): ",lprt);
 		scanf("%" SCNu16,&lprt);
 
-		printf("Remote User: ");
+		printf("Remote User(%s): ",user);
 		scanf("%s",&user);
 	} else {
 		/* TODO */
